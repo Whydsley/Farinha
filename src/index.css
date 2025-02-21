@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:100,200,400,500,600,700");
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,400,500,600,700");
+@import url("https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Bungee+Spice&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CONTENT */
+
+.content {
+  background-color: #8a2be2;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Caixa de tentativas */
+
+h3 {
+  color: white;
+}
+
+.chances-container {
+  background: rgba(72, 8, 132, 0.8);
+  padding: 5px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.chance-box {
+  width: 40px;
+  height: 40px;
+  background: #e7e7e7;
+  border-radius: 15px;
+  border: #480884 1px solid;
+  display: flex;
+  font-size: 1.6rem;
+}
+
+.chance-box span {
+  width: 40px;
+  height: 40px;
+  margin-left: 1.5px;
+}
+
+.chance-box.used {
+  border: red 1px solid;
+}
+
+h2 {
+  color: white;
+}
+
+.square {
+  width: 150px;
+  height: 100px;
+  background-color: pink;
+  border: 2px solid #480884;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.1s ease;
+  box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.5);
+}
+
+.square:hover {
+  border: white 2px solid;
+}
+
+.selected {
+  background-color: #480884; /* Quando estiver selecionado */
+  color: white;
+  border: white 2px solid;
+}
+
+.matched-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 630px;
+  height: 100px;
+  margin: 10px auto;
+  padding: 10px;
+  background: #ffe58e;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #480884;
+  border-radius: 15px;
+  border: #480884 2px solid;
+  box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Apenas os quadrados errados piscam vermelho */
+@keyframes flashRed {
+  0% {
+    background-color: rgb(255, 75, 75);
+  }
+}
+
+.error {
+  animation: flashRed 0.5s 2; /* Pisca vermelho 2 vezes */
+}
+
+.square-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  justify-content: center;
+}
+
+/* Esconde os quadrados quando um grupo é formado */
+.hidden {
+  display: none;
+}
+
+/* Tela de fim de jogo */
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Fundo escuro */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-over-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  background: rgba(138, 43, 226, 1); /* Caixa translúcida */
+  border: #480884 2px solid;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  width: 80%;
+  height: 30vh;
+  max-width: 450px;
+}

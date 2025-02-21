@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node . --watch"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
