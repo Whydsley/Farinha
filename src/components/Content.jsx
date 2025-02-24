@@ -1,56 +1,28 @@
 import { useState, useEffect } from "react";
 
 const Content = () => {
-  const [allContent, setAllContent] = useState([]); // Lista de palavras
+  const [allContent, setAllContent] = useState([]); // Palavras disponíveis
   const [selectedSquares, setSelectedSquares] = useState([]); // Índices selecionados
-  const [matchedGroups, setMatchedGroups] = useState([]); // Grupos encontrados
+  const [matchedGroups, setMatchedGroups] = useState([]); // Temas encontrados
   const [errorFlash, setErrorFlash] = useState([]); // Índices piscando vermelho
-  const [chances, setChances] = useState(4); // Agora são 4 tentativas
+  const [chances, setChances] = useState(4); // Tentativas restantes
   const [gameOver, setGameOver] = useState(false); // Estado de fim de jogo
-  const [gameFinished, setGameFinished] = useState(false);
+  const [timeUntilReset, setTimeUntilReset] = useState(""); // Contador até 00:00
+  const [showCountdown, setShowCountdown] = useState(false);
 
   useEffect(() => {
-    if (chances === 0) {
-      // Coletar os temas que ainda não foram descobertos
-      const remainingThemes = [];
-      const revealedTitles = matchedGroups.map((group) => group.title);
-
-      allContent.forEach((item) => {
-        if (!revealedTitles.includes(item.title)) {
-          const existingGroup = remainingThemes.find(
-            (g) => g.title === item.title
-          );
-          if (existingGroup) {
-            existingGroup.words.push(item.word);
-          } else {
-            remainingThemes.push({ title: item.title, words: [item.word] });
-          }
-        }
-      });
-
-      // Adicionar os temas restantes aos grupos descobertos
-      setMatchedGroups([...matchedGroups, ...remainingThemes]);
-
-      // Esconder os quadrados e ativar fim de jogo
-      setAllContent([]);
-      setGameOver(true);
-    }
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3220/");
+        const response = await fetch("http://localhost:3220/daily-themes");
         const jsonData = await response.json();
 
         if (Array.isArray(jsonData) && jsonData.length > 0) {
           const formattedData = jsonData.flatMap((item) =>
             item.content.map((word) => ({ word, title: item.title }))
           );
-
           setAllContent(shuffleArray(formattedData));
         } else {
-          console.error(
-            "Erro: Dados recebidos não são um array válido",
-            jsonData
-          );
+          console.error("Erro: Dados inválidos", jsonData);
         }
       } catch (err) {
         console.error("Erro ao buscar dados:", err);
@@ -60,6 +32,35 @@ const Content = () => {
     fetchData();
   }, []);
 
+  // Função para calcular o timer
+  const calculateTimeUntilReset = () => {
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0); // Próximas 00:00
+
+    const diff = midnight - now;
+
+    const hours = Math.floor(diff / 1000 / 60 / 60);
+    const minutes = Math.floor((diff / 1000 / 60) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  // Atualizar contador
+  useEffect(() => {
+    if (gameOver || showCountdown) {
+      const timer = setInterval(() => {
+        setTimeUntilReset(calculateTimeUntilReset());
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [gameOver, showCountdown]);
+
+  // Função para embaralhar a array
   const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
 
   const handleSquareClick = (index) => {
@@ -76,70 +77,86 @@ const Content = () => {
     setSelectedSquares(newSelected);
 
     if (newSelected.length === 4) {
-      const selectedWords = newSelected.map((i) => allContent[i]);
-      const allSameCategory = selectedWords.every(
-        (item) => item.title === selectedWords[0].title
-      );
-
-      if (allSameCategory) {
-        setMatchedGroups([
-          ...matchedGroups,
-          {
-            title: selectedWords[0].title,
-            words: selectedWords.map((item) => item.word),
-          },
-        ]);
-
-        const updatedContent = allContent.filter(
-          (_, i) => !newSelected.includes(i)
-        );
-        setAllContent(updatedContent);
-        setSelectedSquares([]);
-
-        if (matchedGroups.length + 1 === 4) {
-          setGameOver(true);
-        }
-      } else {
-        setErrorFlash([...newSelected]);
-        setTimeout(() => {
-          setErrorFlash([]);
-          setSelectedSquares([]);
-          setChances((prev) => prev - 1);
-        }, 1000);
-      }
+      validateSelection(newSelected);
     }
   };
 
-  useEffect(() => {
-    if (chances === 0) {
-      // Descobrir os temas que ainda não foram encontrados
-      const undiscoveredThemes = allContent.reduce((acc, item) => {
-        if (chances === 0 || matchedGroups.length === 4) {
-          setGameOver(true);
-          setGameFinished(true); // Bloqueia o jogo completamente após o fim
-        }
-        if (!matchedGroups.some((group) => group.title === item.title)) {
-          if (!acc.some((group) => group.title === item.title)) {
-            acc.push({
-              title: item.title,
-              words: allContent
-                .filter((word) => word.title === item.title)
-                .map((word) => word.word),
-            });
-          }
-        }
-        return acc;
-      }, []);
-
+  const handleCountdownClick = () => {
+    if (showCountdown) {
       setGameOver(true);
     }
-  }, [chances, allContent, matchedGroups]);
+  };
+
+  const validateSelection = (selected) => {
+    const selectedWords = selected.map((i) => allContent[i]);
+    const allSameCategory = selectedWords.every(
+      (item) => item.title === selectedWords[0].title
+    );
+
+    if (allSameCategory) {
+      setMatchedGroups((prev) => [
+        ...prev,
+        {
+          title: selectedWords[0].title,
+          words: selectedWords.map((item) => item.word),
+        },
+      ]);
+
+      setAllContent((prev) => prev.filter((_, i) => !selected.includes(i)));
+      setSelectedSquares([]);
+
+      if (matchedGroups.length + 1 === 4) {
+        setGameOver(true);
+      }
+    } else {
+      setErrorFlash([...selected]);
+      setTimeout(() => {
+        setErrorFlash([]);
+        setSelectedSquares([]);
+        setChances((prev) => prev - 1);
+      }, 1000);
+    }
+  };
+
+  // Se as chances acabaram, revelar todos os temas e encerrar o jogo
+  useEffect(() => {
+    if (chances === 0 || matchedGroups.length === 4) {
+      setGameOver(true);
+      setShowCountdown(true);
+
+      if (allContent.length > 0) {
+        revealRemainingThemes();
+      }
+    }
+  }, [chances, matchedGroups]);
+
+  const revealRemainingThemes = () => {
+    const revealedTitles = matchedGroups.map((group) => group.title);
+    const remainingThemes = [];
+
+    allContent.forEach((item) => {
+      if (!revealedTitles.includes(item.title)) {
+        const existingGroup = remainingThemes.find(
+          (g) => g.title === item.title
+        );
+        if (existingGroup) {
+          existingGroup.words.push(item.word);
+        } else {
+          remainingThemes.push({ title: item.title, words: [item.word] });
+        }
+      }
+    });
+
+    setMatchedGroups((prev) => [...prev, ...remainingThemes]);
+    setAllContent([]); // Remove todas as palavras da tela
+    setGameOver(true);
+  };
 
   return (
     <div className="content">
       {/* Indicador de tentativas restantes */}
       <div className="chances-container">
-        <h3>Vidas: </h3>
+        <h3>Vidas:</h3>
         {Array.from({ length: 4 }).map((_, index) => (
           <div
             key={index}
@@ -151,32 +168,52 @@ const Content = () => {
       </div>
 
       {/* Grupos já encontrados */}
-      <div className="matched-groups-container">
-        {matchedGroups.map((group, index) => (
-          <div key={index} className="matched-group">
-            <p>
-              <strong>"{group.title}"</strong>
-            </p>
-            <p>{group.words.join(", ")}</p>
-          </div>
-        ))}
-      </div>
+      {matchedGroups.map((group, index) => (
+        <div key={index} className="matched-group">
+          <p>
+            <strong>"{group.title}"</strong>
+          </p>
+          <p>{group.words.join(", ")}</p>
+        </div>
+      ))}
+
       {/* Quadrados com palavras */}
-      {!gameFinished && allContent.length > 0 ? (
+      {allContent.length > 0 && !gameOver && (
         <div className="square-grid">
           {allContent.map((item, index) => (
             <div
               key={index}
               className={`square 
-          ${selectedSquares.includes(index) ? "selected" : ""} 
-          ${errorFlash.includes(index) ? "error" : ""}`}
+                ${selectedSquares.includes(index) ? "selected" : ""} 
+                ${errorFlash.includes(index) ? "error" : ""}`}
               onClick={() => handleSquareClick(index)}
             >
               {item.word}
             </div>
           ))}
         </div>
-      ) : null}
+      )}
+
+      {/* Contador abaixo dos quadrados */}
+      {showCountdown && (
+        <div
+          className="inline-countdown"
+          onClick={handleCountdownClick}
+          style={{ cursor: gameOver ? "default" : "pointer" }}
+        >
+          <div className="countdown-header">
+            <span>🕓 Novos temas em:</span>
+          </div>
+          <div className="timer">
+            {timeUntilReset.split(":").map((unit, index) => (
+              <div key={index} className="time-unit">
+                <span>{unit}</span>
+                <small>{["h", "m", "s"][index]}</small>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Tela de Fim de Jogo */}
       {gameOver && (
@@ -186,15 +223,32 @@ const Content = () => {
               {chances === 0 ? (
                 <>
                   <h2>😢 Suas tentativas acabaram!</h2>
-                  <p>
-                    Novos temas estarão disponíveis às 00h00. Tente novamente
-                    amanhã!
-                  </p>
+                  <div className="countdown">
+                    <p>Novos temas em:</p>
+                    <div className="timer">
+                      {timeUntilReset.split(":").map((unit, index) => (
+                        <div key={index} className="time-unit">
+                          <span>{unit}</span>
+                          <small>{["h", "m", "s"][index]}</small>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </>
               ) : (
                 <>
                   <h2>🎉 Parabéns! Você venceu! 🎉</h2>
-                  <p>Novos temas estarão disponíveis às 00h00. Volte amanhã!</p>
+                  <div className="countdown">
+                    <p>Novos temas em:</p>
+                    <div className="timer">
+                      {timeUntilReset.split(":").map((unit, index) => (
+                        <div key={index} className="time-unit">
+                          <span>{unit}</span>
+                          <small>{["h", "m", "s"][index]}</small>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </>
               )}
             </div>
