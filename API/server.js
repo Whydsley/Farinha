@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const crypto = require("crypto");
-const schedule = require("node-schedule");
 
 const app = express();
 const port = 3220;
@@ -36,36 +34,47 @@ const themePool = [
   },
 ];
 
-// Variável que seleciona os temas do dia
-let currentThemes = [];
-
 // Função para selecionar 4 temas aleatórios
-const refreshThemes = () => {
-  const shuffled = [...themePool].sort(() => 0.5 - Math.random());
-  currentThemes = shuffled.slice(0, 4);
-  console.log("Temas atualizados em: ", new Date().toLocaleString());
-  console.log(currentThemes.map((t) => t.title));
+const mulberry32 = (a) => () => {
+  a |= 0;
+  a = (a + 0x6d2b79f5) | 0;
+  let t = Math.imul(a ^ (a >>> 15), 1 | a);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 };
 
-// Agendar atualização para 00:00
-const job = schedule.scheduleJob("0 0 * * *", refreshThemes);
+const getDailyThemes = (dateStr) => {
+  const seed = [...dateStr].reduce((h, c) => h * 31 + c.charCodeAt(0), 7);
+  const rand = mulberry32(seed);
+  const arr = [...themePool];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, 4);
+};
 
-// Atualizar ao iniciar o servidor, bom para eviar problemas
-refreshThemes();
+const getTodayBR = () => {
+  const now = new Date(Date.now() - 3 * 60 * 60 * 1000);
+  return now.toISOString().slice(0, 10);
+};
 
-// Rota para obter os temas do dia
 app.get("/daily-themes", (req, res) => {
-  res.json(currentThemes);
+  const date = getTodayBR();
+  res.json({ date, themes: getDailyThemes(date) });
+});
+
+app.get("/next-update", (req, res) => {
+  const now = new Date(Date.now() - 3 * 60 * 60 * 1000);
+  const next = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1),
+  );
+  const nextUpdate = new Date(next.getTime() + 3 * 60 * 60 * 1000);
+  res.json({ nextUpdate: nextUpdate.toISOString() });
 });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
-});
-
-app.get("/next-update", (req, res) => {
-  res.json({
-    nextUpdate: job.nextInvocation().toISOString(),
-  });
 });
 
 // Primeira Array de temas para testar as funcionalidades, deixada aqui como lembrança <3
