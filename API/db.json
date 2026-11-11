@@ -1,0 +1,125 @@
+{
+  "themes": [
+    {
+      "id": "796dd4bc-60cc-4f6d-a270-ed9edb2c6005",
+      "title": "Ingredientes de um bolo",
+      "content": [
+        "Açucar",
+        "Farinha",
+        "Ovos",
+        "Leite"
+      ],
+      "difficulty": "easy",
+      "status": "approved",
+      "author": null,
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        0
+      ],
+      "voters": [],
+      "createdAt": "2026-11-11T20:50:45.674Z"
+    },
+    {
+      "id": "e2cb4f76-b111-49fd-baa9-29ef859ebd5c",
+      "title": "Países da América do Sul",
+      "content": [
+        "Brasil",
+        "Argentina",
+        "Chile",
+        "Equador"
+      ],
+      "difficulty": "easy",
+      "status": "approved",
+      "author": null,
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        0
+      ],
+      "voters": [],
+      "createdAt": "2026-11-11T20:50:45.674Z"
+    },
+    {
+      "id": "cf30722d-0b17-46ae-97ac-3bd16473cbf9",
+      "title": "Partes de um computador",
+      "content": [
+        "CPU",
+        "RAM",
+        "GPU",
+        "SSD"
+      ],
+      "difficulty": "medium",
+      "status": "approved",
+      "author": null,
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        1
+      ],
+      "voters": [],
+      "createdAt": "2026-11-11T20:50:45.674Z"
+    },
+    {
+      "id": "1ee8fac7-7b51-40a1-800c-807a52ca1694",
+      "title": "Redes sociais",
+      "content": [
+        "Instagram",
+        "Twitter",
+        "Tinder",
+        "Facebook"
+      ],
+      "difficulty": "medium",
+      "status": "approved",
+      "author": null,
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        1
+      ],
+      "voters": [],
+      "createdAt": "2026-11-11T20:50:45.674Z"
+    },
+    {
+      "id": "cbcf842c-ce1d-4b14-985c-c9bd4480fa92",
+      "title": "Elementos da tabela periódica",
+      "content": [
+        "Ouro",
+        "Hidrogênio",
+        "Silício",
+        "Gálio"
+      ],
+      "difficulty": "hard",
+      "status": "approved",
+      "author": null,
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        2
+      ],
+      "voters": [],
+      "createdAt": "2026-11-11T20:50:45.674Z"
+    },
+    {
+      "id": "90211ca5-91d6-4a0d-af55-624a550ea1de",
+      "title": "Termos náuticos",
+      "content": [
+        "Popa",
+        "Casco",
+        "Bombordo",
+        "Timão"
+      ],
+      "difficulty": "hard",
+      "status": "approved",
+      "author": null,
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        2
+      ],
+      "voters": [],
+      "createdAt": "2026-11-11T20:50:45.674Z"
+    }
+  ],
+  "daily": {}
+}

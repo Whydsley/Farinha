@@ -46,7 +46,11 @@ const Content = () => {
         setNextUpdate(new Date(nextUpdate).getTime());
 
         const allWords = themes.flatMap((item) =>
-          item.content.map((word) => ({ word, title: item.title })),
+          item.content.map((word) => ({
+            word,
+            title: item.title,
+            difficulty: item.difficulty,
+          })),
         );
 
         // Try to restore today's progress
@@ -125,7 +129,6 @@ const Content = () => {
       allContent.forEach((item) => {
         const group = revealed.find((g) => g.title === item.title);
         if (group) group.words.push(item.word);
-        else revealed.push({ title: item.title, words: [item.word] });
       });
       setMatchedGroups((prev) => [...prev, ...revealed]);
       setAllContent([]);
@@ -152,6 +155,7 @@ const Content = () => {
 
   const validateSelection = (selected) => {
     const selectedWords = selected.map((i) => allContent[i]);
+
     const allSameCategory = selectedWords.every(
       (item) => item.title === selectedWords[0].title,
     );
@@ -161,6 +165,7 @@ const Content = () => {
         ...prev,
         {
           title: selectedWords[0].title,
+          difficulty: selectedWords[0].difficulty,
           words: selectedWords.map((item) => item.word),
         },
       ]);
@@ -204,7 +209,7 @@ const Content = () => {
       </div>
 
       {matchedGroups.map((group) => (
-        <div key={group.title} className="matched-group">
+        <div key={group.title} className={`matched-group ${group.difficulty}`}>
           <p>
             <strong>"{group.title}"</strong>
           </p>
