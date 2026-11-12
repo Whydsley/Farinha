@@ -1,9 +1,137 @@
 .footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  gap: 12px 20px;
   background-color: #480884;
   width: 100%;
-  height: 10vh;
+  min-height: 10vh; /* was height */
+  padding: 12px;
   color: white;
+
+  p {
+    margin: 0; /* was 0 33%, which breaks on narrow screens */
+    text-align: center;
+  }
+}
+
+.suggest-btn,
+.vote-btn {
+  background: white;
+  color: #480884;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.suggest-btn:hover,
+.vote-btn:hover {
+  background: #e9d5ff;
+}
+
+/* Popups */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-box {
+  position: relative;
+  background: #8a2be2;
+  color: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: white; /* the default black was hard to see on purple */
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.suggest-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.suggest-form h3 {
+  margin: 0 0 4px;
+}
+
+/* 16px avoids the automatic zoom iPhones apply to smaller inputs */
+.suggest-form input,
+.suggest-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.suggest-form button[type="submit"] {
+  background: #480884;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.vote-themes {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.vote-card {
+  background: white;
+  color: #222;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.vote-card p {
+  margin: 6px 0 10px;
+}
+
+.vote-card select,
+.vote-card button {
+  margin: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .footer p {
+    flex: 1 1 100%; /* text on its own row, buttons below */
+  }
+
+  .modal-box {
+    padding: 20px 16px;
+  }
 }

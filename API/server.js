@@ -141,7 +141,12 @@ const getDailyThemes = (dateStr) => {
     content,
     difficulty,
   }));
+
+  db.daily[dateStr] = result;
+  saveDb();
+  return result;
 };
+
 app.get("/daily-themes", (req, res) => {
   const date = getTodayBR();
   res.json({ date, themes: getDailyThemes(date) });

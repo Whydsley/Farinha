@@ -119,7 +119,136 @@
       ],
       "voters": [],
       "createdAt": "2026-11-11T20:50:45.674Z"
+    },
+    {
+      "id": "5a42c5c1-89f1-4905-ba03-a7be2e878394",
+      "title": "Cantores de Rock",
+      "content": [
+        "Axl Rose",
+        "Freddy Mercury",
+        "Corey Tylor",
+        "Serj Tankyan"
+      ],
+      "difficulty": "hard",
+      "status": "pending",
+      "author": "40412a71-10f6-4741-a01b-d09e4825e20f",
+      "up": 1,
+      "down": 0,
+      "difficultyVotes": [
+        2,
+        1
+      ],
+      "voters": [
+        "85c6dd4f-e8a5-43f2-b705-63e6b1aa4b64"
+      ],
+      "createdAt": "2026-11-12T14:07:44.034Z"
+    },
+    {
+      "id": "f66e7c22-c2a4-45a8-9486-bf0563c92b47",
+      "title": "Palavras com duplo sentido",
+      "content": [
+        "Manga",
+        "Morsa",
+        "Canal",
+        "Ponto"
+      ],
+      "difficulty": "extreme",
+      "status": "pending",
+      "author": "40412a71-10f6-4741-a01b-d09e4825e20f",
+      "up": 1,
+      "down": 0,
+      "difficultyVotes": [
+        3,
+        3
+      ],
+      "voters": [
+        "85c6dd4f-e8a5-43f2-b705-63e6b1aa4b64"
+      ],
+      "createdAt": "2026-11-12T14:19:48.825Z"
+    },
+    {
+      "id": "013dfe75-ee82-45d4-8bdb-3f49422603dc",
+      "title": "Filmes de Terror",
+      "content": [
+        "Halloween",
+        "Hellraiser",
+        "Sexta-Feira 13",
+        "Panico"
+      ],
+      "difficulty": "easy",
+      "status": "pending",
+      "author": "85c6dd4f-e8a5-43f2-b705-63e6b1aa4b64",
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        0
+      ],
+      "voters": [],
+      "createdAt": "2026-11-12T18:28:36.038Z"
+    },
+    {
+      "id": "003cfad5-5dc4-44d3-92a5-95dfd86c521b",
+      "title": "Jogos que já ganharam jogo do ano! (GOTY)",
+      "content": [
+        "Astrobot",
+        "God of War",
+        "Resident Evil 4",
+        "Red Dead Redemption"
+      ],
+      "difficulty": "hard",
+      "status": "pending",
+      "author": "85c6dd4f-e8a5-43f2-b705-63e6b1aa4b64",
+      "up": 0,
+      "down": 0,
+      "difficultyVotes": [
+        2
+      ],
+      "voters": [],
+      "createdAt": "2026-11-12T18:30:37.372Z"
     }
   ],
-  "daily": {}
+  "daily": {
+    "2026-11-12": [
+      {
+        "title": "Ingredientes de um bolo",
+        "content": [
+          "Açucar",
+          "Farinha",
+          "Ovos",
+          "Leite"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "title": "Partes de um computador",
+        "content": [
+          "CPU",
+          "RAM",
+          "GPU",
+          "SSD"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "title": "Elementos da tabela periódica",
+        "content": [
+          "Ouro",
+          "Hidrogênio",
+          "Silício",
+          "Gálio"
+        ],
+        "difficulty": "hard"
+      },
+      {
+        "title": "Países da América do Sul",
+        "content": [
+          "Brasil",
+          "Argentina",
+          "Chile",
+          "Equador"
+        ],
+        "difficulty": "easy"
+      }
+    ]
+  }
 }

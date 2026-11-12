@@ -129,6 +129,12 @@ const Content = () => {
       allContent.forEach((item) => {
         const group = revealed.find((g) => g.title === item.title);
         if (group) group.words.push(item.word);
+        else
+          revealed.push({
+            title: item.title,
+            difficulty: item.difficulty,
+            words: [item.word],
+          });
       });
       setMatchedGroups((prev) => [...prev, ...revealed]);
       setAllContent([]);
